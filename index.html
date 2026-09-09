@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Portal didáctico de ISUPOL sobre estructura de computadores, redes y análisis forense tecnológico.">
+	<title>ISUPOL | Computadores, Redes y Ciberdelitos</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--navy: #102a43;
+			--navy-deep: #081c2f;
+			--blue: #1877b9;
+			--cyan: #36b9c8;
+			--ink: #193047;
+			--muted: #617487;
+			--paper: #f4f7fa;
+			--white: #ffffff;
+			--line: #dbe5ec;
+			--shadow: 0 18px 45px rgba(16, 42, 67, 0.1);
+			--radius: 18px;
+		}
+
+		* { box-sizing: border-box; }
+		html { scroll-behavior: smooth; }
+		body {
+			margin: 0;
+			color: var(--ink);
+			background: var(--paper);
+			font-family: "DM Sans", sans-serif;
+			line-height: 1.6;
+		}
+		img { display: block; width: 100%; height: auto; }
+		button, input { font: inherit; }
+		button { cursor: pointer; }
+		a { color: inherit; text-decoration: none; }
+		.skip-link { position: absolute; left: -9999px; }
+		.skip-link:focus { left: 1rem; top: 1rem; z-index: 10; padding: .7rem 1rem; background: var(--white); }
+
+		.site-header {
+			position: sticky;
+			top: 0;
+			z-index: 5;
+			color: var(--white);
+			background: rgba(8, 28, 47, .95);
+			border-bottom: 1px solid rgba(255, 255, 255, .12);
+			backdrop-filter: blur(12px);
+		}
+		.nav-wrap, .hero-inner, .section-inner, .footer-inner { width: min(1160px, calc(100% - 2rem)); margin: auto; }
+		.nav-wrap { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+		.brand { display: flex; align-items: center; gap: .75rem; font-family: "Space Grotesk", sans-serif; font-weight: 700; letter-spacing: .03em; }
+		.brand-mark { display: grid; place-items: center; width: 39px; height: 39px; border: 1px solid rgba(255,255,255,.5); border-radius: 10px; color: var(--cyan); }
+		.nav-links { display: flex; gap: .25rem; align-items: center; }
+		.nav-links a { padding: .6rem .75rem; color: #d7e5ef; font-size: .9rem; }
+		.nav-links a:hover, .nav-links a:focus { color: var(--white); }
+		.menu-toggle { display: none; color: var(--white); background: transparent; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; padding: .45rem .65rem; }
+
+		.hero { position: relative; overflow: hidden; padding: 5rem 0 4rem; color: var(--white); background: linear-gradient(125deg, var(--navy-deep), var(--navy) 62%, #0d5878); }
+		.hero::after { content: ""; position: absolute; right: -8rem; bottom: -10rem; width: 34rem; height: 34rem; border: 1px solid rgba(54,185,200,.28); border-radius: 50%; box-shadow: 0 0 0 3rem rgba(54,185,200,.05), 0 0 0 7rem rgba(54,185,200,.04); }
+		.hero-inner { position: relative; z-index: 1; }
+		.eyebrow { margin: 0 0 .9rem; color: var(--cyan); font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+		h1, h2, h3 { margin: 0; font-family: "Space Grotesk", sans-serif; line-height: 1.12; }
+		h1 { max-width: 770px; font-size: clamp(2.4rem, 6vw, 4.8rem); letter-spacing: -.045em; }
+		.hero-lead { max-width: 700px; margin: 1.4rem 0 2rem; color: #d7e5ef; font-size: 1.15rem; }
+		.institution-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 3rem; border-top: 1px solid rgba(255,255,255,.2); border-bottom: 1px solid rgba(255,255,255,.2); }
+		.institution-grid div { padding: 1rem .9rem 1rem 0; }
+		.institution-grid div + div { padding-left: 1rem; border-left: 1px solid rgba(255,255,255,.2); }
+		.label { display: block; margin-bottom: .3rem; color: #8bdde2; font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+		.institution-grid span:last-child { color: #edf5f8; font-size: .9rem; }
+
+		.section { padding: 5rem 0; }
+		.section.alt { background: var(--white); }
+		.section-heading { display: flex; justify-content: space-between; align-items: end; gap: 2rem; margin-bottom: 2.1rem; }
+		.section-heading h2 { max-width: 650px; font-size: clamp(1.8rem, 4vw, 3rem); }
+		.section-heading p { max-width: 420px; margin: 0; color: var(--muted); }
+		.module-number { display: inline-grid; place-items: center; width: 2rem; height: 2rem; margin-bottom: 1rem; border-radius: 50%; color: var(--white); background: var(--blue); font-weight: 700; }
+		.module-layout { display: grid; grid-template-columns: 1.15fr .85fr; gap: 2rem; align-items: start; }
+		.image-frame { overflow: hidden; min-height: 230px; border-radius: var(--radius); background: #dce8ef; box-shadow: var(--shadow); }
+		.image-frame img { height: 100%; min-height: 230px; object-fit: cover; }
+		.image-caption { margin: .75rem 0 0; color: var(--muted); font-size: .82rem; }
+		.panel { padding: 1.5rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); box-shadow: 0 8px 25px rgba(16,42,67,.05); }
+		.panel h3 { margin-bottom: .7rem; font-size: 1.25rem; }
+		.panel p { color: var(--muted); }
+
+		.component-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin-top: 1.3rem; }
+		.component-button { padding: 1rem .75rem; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: #f8fbfc; text-align: left; transition: .2s ease; }
+		.component-button:hover, .component-button.active { border-color: var(--cyan); background: #eaf8f8; transform: translateY(-2px); }
+		.component-button strong { display: block; margin-bottom: .3rem; }
+		.component-button small { color: var(--muted); }
+		.component-detail { min-height: 76px; margin-top: 1rem; padding: .9rem 1rem; border-left: 3px solid var(--cyan); color: var(--muted); background: #f4fafb; }
+
+		.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; margin-top: 1.3rem; }
+		.step { padding: 1rem; border-top: 3px solid var(--line); background: #f8fbfc; transition: border-color .2s; }
+		.step.active { border-color: var(--blue); }
+		.step-number { color: var(--blue); font-weight: 700; }
+		.step h3 { margin: .25rem 0; font-size: 1.05rem; }
+		.step p { margin: 0; font-size: .9rem; }
+		.cycle-controls { display: flex; gap: .7rem; margin-top: 1rem; }
+		.control-button { padding: .65rem 1rem; border: 0; border-radius: 8px; color: var(--white); background: var(--navy); }
+		.control-button.secondary { color: var(--navy); background: #e2edf3; }
+
+		.memory-ladder { display: grid; gap: .55rem; margin-top: 1.3rem; }
+		.memory-level { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .8rem 1rem; border-left: 5px solid var(--cyan); background: #edf7f8; }
+		.memory-level:nth-child(2) { width: 84%; border-color: #39a6c6; }
+		.memory-level:nth-child(3) { width: 68%; border-color: #3985b5; }
+		.memory-level:nth-child(4) { width: 52%; border-color: var(--blue); }
+		.memory-level strong { font-size: .95rem; }
+		.memory-level span { color: var(--muted); font-size: .8rem; text-align: right; }
+
+		.comparison { overflow: hidden; margin-top: 1.4rem; border: 1px solid var(--line); border-radius: 14px; }
+		.comparison-controls { display: flex; gap: .5rem; margin-bottom: 1rem; }
+		.filter-button { padding: .5rem .85rem; border: 1px solid var(--line); border-radius: 20px; color: var(--muted); background: var(--white); }
+		.filter-button.active { color: var(--white); border-color: var(--blue); background: var(--blue); }
+		.compare-row { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+		.compare-row > div { padding: 1rem; }
+		.compare-row > div + div { border-left: 1px solid var(--line); }
+		.compare-head { color: var(--white); background: var(--navy); font-weight: 700; }
+		.compare-row p { margin: .2rem 0 0; color: var(--muted); font-size: .9rem; }
+
+		.topology-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+		.topology-card { padding: 1.3rem; border: 1px solid var(--line); border-radius: 14px; background: var(--white); }
+		.topology-card h3 { margin-bottom: .55rem; }
+		.topology-card p { margin: 0; color: var(--muted); font-size: .92rem; }
+		.impact { display: inline-block; margin-top: 1rem; padding: .3rem .55rem; border-radius: 6px; color: #155e65; background: #dff4f3; font-size: .78rem; font-weight: 700; }
+
+		.forensic-callout { padding: 2rem; border-radius: var(--radius); color: var(--white); background: linear-gradient(120deg, var(--navy), #155b72); box-shadow: var(--shadow); }
+		.forensic-callout p { max-width: 850px; color: #d9ebef; font-size: 1.05rem; }
+		.forensic-points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+		.forensic-point { padding-top: 1rem; border-top: 1px solid rgba(255,255,255,.35); }
+		.forensic-point h3 { color: #91e3e4; font-size: 1.05rem; }
+		.forensic-point p { margin-bottom: 0; font-size: .9rem; }
+
+		footer { padding: 2rem 0; color: #d0e0ea; background: var(--navy-deep); }
+		.footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: .85rem; }
+		.footer-inner p { margin: 0; }
+		.back-top { color: var(--cyan); }
+		.reveal { animation: reveal .65s ease both; }
+		@keyframes reveal { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+		@media (max-width: 800px) {
+			.nav-links { display: none; position: absolute; top: 70px; left: 0; right: 0; padding: .8rem 1rem 1rem; flex-direction: column; align-items: stretch; background: var(--navy-deep); }
+			.nav-links.open { display: flex; }
+			.menu-toggle { display: block; }
+			.institution-grid, .module-layout, .topology-grid, .forensic-points { grid-template-columns: 1fr; }
+			.institution-grid div + div { padding-left: 0; border-left: 0; border-top: 1px solid rgba(255,255,255,.2); }
+			.institution-grid div { padding: .85rem 0; }
+			.section-heading { display: block; }
+			.section-heading p { margin-top: 1rem; }
+			.memory-level:nth-child(n) { width: 100%; }
+		}
+		@media (max-width: 480px) {
+			.hero { padding: 3.5rem 0 3rem; }
+			.section { padding: 3.5rem 0; }
+			.component-buttons, .steps { grid-template-columns: 1fr; }
+			.compare-row { grid-template-columns: 1fr; }
+			.compare-row > div + div { border-top: 1px solid var(--line); border-left: 0; }
+			.footer-inner { display: block; }
+			.back-top { display: inline-block; margin-top: .75rem; }
+		}
+	</style>
+</head>
+<body id="inicio">
+	<a class="skip-link" href="#contenido">Saltar al contenido</a>
+	<header class="site-header">
+		<div class="nav-wrap">
+			<a class="brand" href="#inicio" aria-label="Inicio ISUPOL"><span class="brand-mark">I</span><span>ISUPOL / LAB</span></a>
+			<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menú</button>
+			<nav id="nav-links" class="nav-links" aria-label="Navegación principal">
+				<a href="#computadores">Computadores</a>
+				<a href="#redes">Redes</a>
+				<a href="#ciberdelitos">Ciberdelitos</a>
+			</nav>
+		</div>
+	</header>
+
+	<main id="contenido">
+		<section class="hero">
+			<div class="hero-inner reveal">
+				<p class="eyebrow">Instituto Superior Universitario Policial</p>
+				<h1>Estructura digital para investigar con precisión.</h1>
+				<p class="hero-lead">Un portal didáctico para comprender cómo los computadores procesan información, cómo se conectan las redes y cómo esos fundamentos sostienen la investigación de ciberdelitos.</p>
+				<div class="institution-grid">
+					<div><span class="label">Institución</span><span>Instituto Superior Universitario Policial (ISUPOL)</span></div>
+					<div><span class="label">Proyecto</span><span>Despliegue de un Portal Web sobre Estructura de Computadores y Redes mediante GitHub Codespaces y GitHub Pages.</span></div>
+					<div><span class="label">Autor</span><span>Sr. Cbop. Gustavo Valentín Mariño Gavino</span></div>
+					<div><span class="label">Fecha de creación</span><span>Martes, 08 de septiembre del 2026</span></div>
+				</div>
+			</div>
+		</section>
+
+		<section id="computadores" class="section">
+			<div class="section-inner">
+				<div class="section-heading"><div><span class="module-number">01</span><h2>Arquitectura y estructura de computadores</h2></div><p>Del dato almacenado a la instrucción ejecutada: explora los elementos que hacen posible el procesamiento.</p></div>
+				<div class="module-layout">
+					<div>
+						<div class="image-frame"><img src="images/cpu-architecture.jpg" alt="Diagrama de referencia de la arquitectura interna de una CPU"></div>
+						<p class="image-caption">Imagen de referencia: sustituye `images/cpu-architecture.jpg` por tu recurso visual.</p>
+					</div>
+					<article class="panel">
+						<h3>Componentes principales de la CPU</h3>
+						<p>Selecciona un componente para consultar su función dentro del procesamiento de una instrucción.</p>
+						<div class="component-buttons" role="tablist" aria-label="Componentes de la CPU">
+							<button class="component-button active" type="button" data-component="alu"><strong>ALU</strong><small>Operaciones</small></button>
+							<button class="component-button" type="button" data-component="uc"><strong>UC</strong><small>Control</small></button>
+							<button class="component-button" type="button" data-component="registros"><strong>Registros</strong><small>Datos inmediatos</small></button>
+						</div>
+						<div id="component-detail" class="component-detail" aria-live="polite">La ALU realiza operaciones aritméticas y lógicas con los datos que recibe.</div>
+					</article>
+				</div>
+				<div class="module-layout" style="margin-top: 2rem;">
+					<article class="panel">
+						<h3>Ciclo de instrucción</h3>
+						<p>El procesador repite este ciclo para transformar instrucciones en acciones observables.</p>
+						<div class="steps" aria-label="Pasos del ciclo Fetch-Decode-Execute">
+							<div class="step active"><span class="step-number">01 / FETCH</span><h3>Buscar</h3><p>La instrucción se obtiene de memoria.</p></div>
+							<div class="step"><span class="step-number">02 / DECODE</span><h3>Decodificar</h3><p>La unidad de control interpreta la orden.</p></div>
+							<div class="step"><span class="step-number">03 / EXECUTE</span><h3>Ejecutar</h3><p>La ALU o el sistema realiza la operación.</p></div>
+						</div>
+						<div class="cycle-controls"><button id="next-step" class="control-button" type="button">Siguiente paso</button><button id="reset-step" class="control-button secondary" type="button">Reiniciar</button></div>
+					</article>
+					<article class="panel">
+						<h3>Jerarquía de memoria</h3>
+						<p>Cuanto más cerca está la memoria del procesador, mayor es su velocidad y menor su capacidad.</p>
+						<div class="memory-ladder" aria-label="Jerarquía de memoria de mayor a menor velocidad">
+							<div class="memory-level"><strong>Registros</strong><span>Máxima velocidad · mínima capacidad</span></div>
+							<div class="memory-level"><strong>Caché</strong><span>Muy rápida · datos frecuentes</span></div>
+							<div class="memory-level"><strong>Memoria RAM</strong><span>Volátil · trabajo activo</span></div>
+							<div class="memory-level"><strong>Almacenamiento secundario</strong><span>Persistente · mayor capacidad</span></div>
+						</div>
+					</article>
+				</div>
+			</div>
+		</section>
+
+		<section id="redes" class="section alt">
+			<div class="section-inner">
+				<div class="section-heading"><div><span class="module-number">02</span><h2>Fundamentos de redes de comunicaciones</h2></div><p>Las redes permiten compartir recursos y evidencias, pero también crean superficies que deben comprenderse y protegerse.</p></div>
+				<div class="module-layout">
+					<article class="panel">
+						<h3>Conceptos básicos</h3>
+						<p>Una red conecta dispositivos mediante medios y protocolos para intercambiar datos. Sus componentes esenciales incluyen nodos, interfaces, medios de transmisión, dispositivos de interconexión y reglas de comunicación.</p>
+						<p>En el trabajo policial, entender ese recorrido permite ubicar el origen, destino y contexto temporal de una comunicación digital.</p>
+					</article>
+					<div>
+						<div class="image-frame"><img src="images/network-fundamentals.jpg" alt="Esquema de referencia de una red de comunicaciones"></div>
+						<p class="image-caption">Imagen de referencia: sustituye `images/network-fundamentals.jpg`.</p>
+					</div>
+				</div>
+				<article class="panel" style="margin-top: 2rem;">
+					<h3>Direccionamiento: IP y MAC</h3>
+					<p>Usa los filtros para enfocar la comparación entre la identidad lógica y física de un dispositivo.</p>
+					<div class="comparison-controls"><button class="filter-button active" type="button" data-filter="all">Ambas</button><button class="filter-button" type="button" data-filter="ip">IP</button><button class="filter-button" type="button" data-filter="mac">MAC</button></div>
+					<div class="comparison">
+						<div class="compare-row compare-head"><div data-column="ip">Dirección IP · lógica</div><div data-column="mac">Dirección MAC · física</div></div>
+						<div class="compare-row"><div data-column="ip"><strong>Identifica una ubicación en la red.</strong><p>Puede cambiar al cambiar de red. Ejemplo: 192.168.1.20.</p></div><div data-column="mac"><strong>Identifica la interfaz de red.</strong><p>Viene asociada al hardware. Ejemplo: 00:1A:2B:3C:4D:5E.</p></div></div>
+						<div class="compare-row"><div data-column="ip"><strong>Ruteable.</strong><p>Los routers la utilizan para dirigir paquetes entre redes.</p></div><div data-column="mac"><strong>Local.</strong><p>Opera principalmente dentro del segmento de red inmediato.</p></div></div>
+					</div>
+				</article>
+				<div class="topology-grid">
+					<article class="topology-card"><h3>Estrella</h3><p>Todos los nodos dependen de un dispositivo central. Un fallo en un cable aísla un equipo; el fallo central interrumpe toda la red.</p><span class="impact">Fallo central: alto impacto</span></article>
+					<article class="topology-card"><h3>Anillo</h3><p>Los nodos forman un circuito. Una interrupción puede romper el recorrido completo, aunque los diseños redundantes reducen ese riesgo.</p><span class="impact">Fallo de enlace: impacto alto</span></article>
+					<article class="topology-card"><h3>Bus</h3><p>Todos comparten un medio lineal. Una avería en el cable principal afecta a todos los dispositivos conectados.</p><span class="impact">Medio principal: crítico</span></article>
+				</div>
+			</div>
+		</section>
+
+		<section id="ciberdelitos" class="section">
+			<div class="section-inner">
+				<div class="section-heading"><div><span class="module-number">03</span><h2>Aplicación en la investigación de ciberdelitos</h2></div><p>La arquitectura no es solo teoría: es el mapa para preservar, interpretar y relacionar evidencia digital.</p></div>
+				<div class="forensic-callout">
+					<h3>Análisis forense tecnológico</h3>
+					<p>Conocer la memoria RAM, los registros y el tráfico de red permite reconstruir qué estaba ocurriendo en un sistema y qué rastros dejó una actividad. La evidencia digital es frágil: debe adquirirse, documentarse y analizarse preservando su integridad y contexto.</p>
+					<div class="forensic-points">
+						<div class="forensic-point"><h3>Volatilidad de la evidencia</h3><p>La RAM puede perder su contenido al apagar el equipo. Procesos, conexiones y claves activas deben considerarse antes de intervenir.</p></div>
+						<div class="forensic-point"><h3>Registros del sistema</h3><p>Los registros pueden revelar eventos, usuarios, horarios y cambios que conectan una acción con un dispositivo o una cuenta.</p></div>
+						<div class="forensic-point"><h3>Análisis de paquetes</h3><p>La inspección del tráfico ayuda a identificar comunicaciones, protocolos, destinos y patrones útiles para formular hipótesis verificables.</p></div>
+					</div>
+				</div>
+				<div class="module-layout" style="margin-top: 2rem;">
+					<div><div class="image-frame"><img src="images/ram-forensics.jpg" alt="Imagen de referencia para el análisis forense de memoria RAM"></div><p class="image-caption">Imagen de referencia: sustituye `images/ram-forensics.jpg`.</p></div>
+					<article class="panel"><h3>Cadena de análisis</h3><p><strong>Preservar:</strong> documentar el estado y reducir alteraciones.</p><p><strong>Adquirir:</strong> obtener copias forenses verificables.</p><p><strong>Interpretar:</strong> correlacionar memoria, registros y paquetes.</p><p><strong>Comunicar:</strong> presentar hallazgos reproducibles y comprensibles.</p></article>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer><div class="footer-inner"><p>ISUPOL / Portal didáctico · 2026</p><a class="back-top" href="#inicio">Volver al inicio ↑</a></div></footer>
+	<script>
+		const menuToggle = document.querySelector('.menu-toggle');
+		const navLinks = document.querySelector('#nav-links');
+		menuToggle.addEventListener('click', () => {
+			const isOpen = navLinks.classList.toggle('open');
+			menuToggle.setAttribute('aria-expanded', String(isOpen));
+		});
+		document.querySelectorAll('.nav-links a').forEach((link) => link.addEventListener('click', () => {
+			navLinks.classList.remove('open');
+			menuToggle.setAttribute('aria-expanded', 'false');
+		}));
+
+		const componentDescriptions = {
+			alu: 'La ALU realiza operaciones aritméticas y lógicas con los datos que recibe.',
+			uc: 'La unidad de control coordina el ciclo de instrucción y envía señales a los demás componentes.',
+			registros: 'Los registros almacenan temporalmente datos, direcciones o instrucciones de acceso inmediato.'
+		};
+		const componentDetail = document.querySelector('#component-detail');
+		document.querySelectorAll('.component-button').forEach((button) => button.addEventListener('click', () => {
+			document.querySelectorAll('.component-button').forEach((item) => item.classList.remove('active'));
+			button.classList.add('active');
+			componentDetail.textContent = componentDescriptions[button.dataset.component];
+		}));
+
+		const steps = document.querySelectorAll('.step');
+		let currentStep = 0;
+		const renderStep = () => steps.forEach((step, index) => step.classList.toggle('active', index === currentStep));
+		document.querySelector('#next-step').addEventListener('click', () => { currentStep = (currentStep + 1) % steps.length; renderStep(); });
+		document.querySelector('#reset-step').addEventListener('click', () => { currentStep = 0; renderStep(); });
+
+		const comparisonColumns = document.querySelectorAll('[data-column]');
+		document.querySelectorAll('.filter-button').forEach((button) => button.addEventListener('click', () => {
+			document.querySelectorAll('.filter-button').forEach((item) => item.classList.remove('active'));
+			button.classList.add('active');
+			const filter = button.dataset.filter;
+			comparisonColumns.forEach((column) => { column.style.display = filter === 'all' || column.dataset.column === filter ? '' : 'none'; });
+		}));
+	</script>
+</body>
+</html>
