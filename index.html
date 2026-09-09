@@ -56,8 +56,8 @@
 		.nav-links a:hover, .nav-links a:focus { color: var(--white); }
 		.menu-toggle { display: none; color: var(--white); background: transparent; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; padding: .45rem .65rem; }
 		.header-actions { display: flex; align-items: center; gap: .7rem; }
-		.download-button { display: inline-flex; align-items: center; gap: .45rem; padding: .55rem .75rem; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; color: var(--white); background: transparent; font-size: .85rem; }
-		.download-button:hover, .download-button:focus { border-color: var(--cyan); color: var(--cyan); }
+		.print-button { display: inline-flex; align-items: center; gap: .45rem; padding: .55rem .75rem; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; color: var(--white); background: transparent; font-size: .85rem; }
+		.print-button:hover, .print-button:focus { border-color: var(--cyan); color: var(--cyan); }
 
 		.hero { position: relative; overflow: hidden; padding: 5rem 0 4rem; color: var(--white); background: linear-gradient(125deg, var(--navy-deep), var(--navy) 62%, #0d5878); }
 		.hero::after { content: ""; position: absolute; right: -8rem; bottom: -10rem; width: 34rem; height: 34rem; border: 1px solid rgba(54,185,200,.28); border-radius: 50%; box-shadow: 0 0 0 3rem rgba(54,185,200,.05), 0 0 0 7rem rgba(54,185,200,.04); }
@@ -187,8 +187,8 @@
 			.footer-inner { display: block; }
 			.back-top { display: inline-block; margin-top: .75rem; }
 			.header-actions { gap: .35rem; }
-			.download-button { padding: .5rem; font-size: 0; }
-			.download-button::before { content: "⇩"; font-size: 1.1rem; }
+			.print-button { padding: .5rem; font-size: 0; }
+			.print-button::before { content: "⎙"; font-size: 1.1rem; }
 		}
 	</style>
 </head>
@@ -198,7 +198,7 @@
 		<div class="nav-wrap">
 			<a class="brand" href="#inicio" aria-label="Inicio del Instituto Superior Policía Nacional"><span class="brand-mark">I</span><span>ISUPOL / LAB</span></a>
 			<div class="header-actions">
-				<button id="download-pdf" class="download-button" type="button" title="Descargar documento en PDF">⇩ <span>Descargar PDF</span></button>
+				<button id="print-document" class="print-button" type="button" title="Imprimir documento">⎙ <span>Imprimir documento</span></button>
 				<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menú</button>
 				<nav id="nav-links" class="nav-links" aria-label="Navegación principal">
 					<a href="#computadores">Computadores</a>
@@ -338,57 +338,10 @@
 	</main>
 
 	<footer><div class="footer-inner"><p>Instituto Superior Policía Nacional / Portal didáctico · 2026</p><a class="back-top" href="#inicio">Volver al inicio ↑</a></div></footer>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 	<script>
 		const menuToggle = document.querySelector('.menu-toggle');
 		const navLinks = document.querySelector('#nav-links');
-		const downloadPdfButton = document.querySelector('#download-pdf');
-		downloadPdfButton.addEventListener('click', () => {
-			if (!window.jspdf) {
-				window.alert('No se pudo cargar el generador PDF. Comprueba la conexión a Internet e inténtalo nuevamente.');
-				return;
-			}
-			const { jsPDF } = window.jspdf;
-			const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
-			const margin = 18;
-			const pageWidth = pdf.internal.pageSize.getWidth();
-			const pageHeight = pdf.internal.pageSize.getHeight();
-			const textWidth = pageWidth - margin * 2;
-			let cursorY = 22;
-			const addText = (text, size, color, gap = 6) => {
-				pdf.setFontSize(size);
-				pdf.setTextColor(...color);
-				const lines = pdf.splitTextToSize(text, textWidth);
-				if (cursorY + lines.length * (size * .45) > pageHeight - 18) {
-					pdf.addPage();
-					cursorY = 22;
-				}
-				pdf.text(lines, margin, cursorY);
-				cursorY += lines.length * (size * .45) + gap;
-			};
-			const addHeading = (text) => {
-				if (cursorY > pageHeight - 32) { pdf.addPage(); cursorY = 22; }
-				pdf.setDrawColor(24, 119, 185);
-				pdf.setLineWidth(.6);
-				pdf.line(margin, cursorY - 4, pageWidth - margin, cursorY - 4);
-				addText(text, 14, [16, 42, 67], 5);
-			};
-			pdf.setFillColor(8, 28, 47);
-			pdf.rect(0, 0, pageWidth, 42, 'F');
-			addText('INSTITUTO SUPERIOR POLICÍA NACIONAL', 18, [255, 255, 255], 3);
-			addText('Portal didáctico: Computadores, Redes y Ciberdelitos', 11, [145, 227, 228], 10);
-			addText('Autor: Sr. Cbop. Gustavo Valentín Mariño Gavino | Materia: Informática Básica | Carrera: Investigación de ciberdelitos | Fecha: Martes, 08 de septiembre del 2026', 9, [51, 78, 104], 8);
-			addHeading('Módulo 1. Arquitectura y estructura de computadores');
-			addText('La CPU interpreta instrucciones y coordina el movimiento de datos. La ALU realiza operaciones aritméticas y lógicas; la Unidad de Control organiza las señales; y los registros almacenan datos e instrucciones de acceso inmediato.', 10, [51, 78, 104]);
-			addText('Ciclo de instrucción: Buscar (Fetch), Decodificar (Decode) y Ejecutar (Execute). Jerarquía de memoria: registros, caché, memoria RAM y almacenamiento secundario, desde la mayor velocidad y menor capacidad hasta la mayor capacidad y persistencia.', 10, [51, 78, 104]);
-			addHeading('Módulo 2. Fundamentos de redes de comunicaciones');
-			addText('Una red conecta dispositivos mediante medios y protocolos. Sus elementos incluyen dispositivos finales, switches, routers, puntos de acceso e interfaces. La dirección IP identifica una ubicación lógica y puede cambiar; la dirección MAC identifica físicamente una interfaz dentro del segmento local.', 10, [51, 78, 104]);
-			addText('Topologías: en estrella, el fallo del dispositivo central afecta a toda la red; en anillo, una interrupción puede romper el circuito; en bus, una avería del medio principal afecta a todos los dispositivos.', 10, [51, 78, 104]);
-			addHeading('Módulo 3. Aplicación en la investigación de ciberdelitos');
-			addText('La memoria RAM es evidencia volátil y puede contener procesos, sesiones, comandos y conexiones activas. Los registros permiten establecer una línea temporal. El análisis de paquetes aporta origen, destino, protocolo y tiempo para correlacionar comunicaciones.', 10, [51, 78, 104]);
-			addText('Cadena de análisis: preservar el estado, adquirir copias verificables, interpretar memoria, registros y paquetes, y comunicar hallazgos reproducibles. Toda actuación debe documentar integridad, contexto y metodología.', 10, [51, 78, 104]);
-			pdf.save('portal-isupol-computadores-redes-ciberdelitos.pdf');
-		});
+		document.querySelector('#print-document').addEventListener('click', () => window.print());
 		menuToggle.addEventListener('click', () => {
 			const isOpen = navLinks.classList.toggle('open');
 			menuToggle.setAttribute('aria-expanded', String(isOpen));
