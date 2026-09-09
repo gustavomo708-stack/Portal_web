@@ -32,7 +32,6 @@
 			font-family: "DM Sans", sans-serif;
 			line-height: 1.6;
 		}
-		img { display: block; width: 100%; height: auto; }
 		button, input { font: inherit; }
 		button { cursor: pointer; }
 		a { color: inherit; text-decoration: none; }
@@ -56,6 +55,9 @@
 		.nav-links a { padding: .6rem .75rem; color: #d7e5ef; font-size: .9rem; }
 		.nav-links a:hover, .nav-links a:focus { color: var(--white); }
 		.menu-toggle { display: none; color: var(--white); background: transparent; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; padding: .45rem .65rem; }
+		.header-actions { display: flex; align-items: center; gap: .7rem; }
+		.print-button { display: inline-flex; align-items: center; gap: .45rem; padding: .55rem .75rem; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; color: var(--white); background: transparent; font-size: .85rem; }
+		.print-button:hover, .print-button:focus { border-color: var(--cyan); color: var(--cyan); }
 
 		.hero { position: relative; overflow: hidden; padding: 5rem 0 4rem; color: var(--white); background: linear-gradient(125deg, var(--navy-deep), var(--navy) 62%, #0d5878); }
 		.hero::after { content: ""; position: absolute; right: -8rem; bottom: -10rem; width: 34rem; height: 34rem; border: 1px solid rgba(54,185,200,.28); border-radius: 50%; box-shadow: 0 0 0 3rem rgba(54,185,200,.05), 0 0 0 7rem rgba(54,185,200,.04); }
@@ -64,7 +66,7 @@
 		h1, h2, h3 { margin: 0; font-family: "Space Grotesk", sans-serif; line-height: 1.12; }
 		h1 { max-width: 770px; font-size: clamp(2.4rem, 6vw, 4.8rem); letter-spacing: -.045em; }
 		.hero-lead { max-width: 700px; margin: 1.4rem 0 2rem; color: #d7e5ef; font-size: 1.15rem; }
-		.institution-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 3rem; border-top: 1px solid rgba(255,255,255,.2); border-bottom: 1px solid rgba(255,255,255,.2); }
+		.institution-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 3rem; border-top: 1px solid rgba(255,255,255,.2); border-bottom: 1px solid rgba(255,255,255,.2); }
 		.institution-grid div { padding: 1rem .9rem 1rem 0; }
 		.institution-grid div + div { padding-left: 1rem; border-left: 1px solid rgba(255,255,255,.2); }
 		.label { display: block; margin-bottom: .3rem; color: #8bdde2; font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
@@ -77,12 +79,18 @@
 		.section-heading p { max-width: 420px; margin: 0; color: var(--muted); }
 		.module-number { display: inline-grid; place-items: center; width: 2rem; height: 2rem; margin-bottom: 1rem; border-radius: 50%; color: var(--white); background: var(--blue); font-weight: 700; }
 		.module-layout { display: grid; grid-template-columns: 1.15fr .85fr; gap: 2rem; align-items: start; }
-		.image-frame { overflow: hidden; min-height: 230px; border-radius: var(--radius); background: #dce8ef; box-shadow: var(--shadow); }
-		.image-frame img { height: 100%; min-height: 230px; object-fit: cover; }
-		.image-caption { margin: .75rem 0 0; color: var(--muted); font-size: .82rem; }
 		.panel { padding: 1.5rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); box-shadow: 0 8px 25px rgba(16,42,67,.05); }
 		.panel h3 { margin-bottom: .7rem; font-size: 1.25rem; }
 		.panel p { color: var(--muted); }
+		.panel ul { margin: .9rem 0 0; padding-left: 1.15rem; color: var(--muted); }
+		.panel li + li { margin-top: .45rem; }
+		.info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
+		.info-card { padding: 1.25rem; border-top: 3px solid var(--cyan); background: #f7fafc; }
+		.info-card h3 { margin-bottom: .5rem; font-size: 1.05rem; }
+		.info-card p { margin: 0; color: var(--muted); font-size: .92rem; }
+		.definition-list { display: grid; grid-template-columns: auto 1fr; gap: .65rem 1rem; margin: 1rem 0 0; }
+		.definition-list dt { color: var(--blue); font-weight: 700; }
+		.definition-list dd { margin: 0; color: var(--muted); }
 
 		.component-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin-top: 1.3rem; }
 		.component-button { padding: 1rem .75rem; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: #f8fbfc; text-align: left; transition: .2s ease; }
@@ -138,12 +146,32 @@
 		.back-top { color: var(--cyan); }
 		.reveal { animation: reveal .65s ease both; }
 		@keyframes reveal { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+		@media print {
+			@page { margin: 1.5cm; }
+			body { color: #172b3d; background: #fff; font-size: 10.5pt; }
+			.site-header, .menu-toggle, .header-actions, .cycle-controls, .comparison-controls, .back-top { display: none !important; }
+			.hero { padding: 1rem 0 1.5rem; color: #172b3d; background: #fff; }
+			.hero::after { display: none; }
+			.hero-lead, .section-heading p, .panel p, .panel li, .topology-card p, .forensic-point p, .compare-row p { color: #334e68; }
+			.institution-grid { grid-template-columns: repeat(2, 1fr); margin-top: 1.2rem; border-color: #9fb3c3; }
+			.institution-grid div + div { border-color: #9fb3c3; }
+			.institution-grid span:last-child { color: #172b3d; }
+			.section { padding: 1.5rem 0; break-inside: avoid; }
+			.section.alt { background: #fff; }
+			.section-heading { margin-bottom: 1rem; }
+			.module-layout, .topology-grid, .forensic-points, .info-grid { gap: .8rem; }
+			.panel, .topology-card, .forensic-callout { box-shadow: none; border-color: #b8c7d1; }
+			.forensic-callout { color: #172b3d; background: #eef5f7; }
+			.forensic-callout p { color: #334e68; }
+			.forensic-point h3 { color: #0d5878; }
+			footer { padding: 1rem 0; color: #334e68; background: #fff; border-top: 1px solid #b8c7d1; }
+		}
 
 		@media (max-width: 800px) {
 			.nav-links { display: none; position: absolute; top: 70px; left: 0; right: 0; padding: .8rem 1rem 1rem; flex-direction: column; align-items: stretch; background: var(--navy-deep); }
 			.nav-links.open { display: flex; }
 			.menu-toggle { display: block; }
-			.institution-grid, .module-layout, .topology-grid, .forensic-points { grid-template-columns: 1fr; }
+			.institution-grid, .module-layout, .topology-grid, .forensic-points, .info-grid { grid-template-columns: 1fr; }
 			.institution-grid div + div { padding-left: 0; border-left: 0; border-top: 1px solid rgba(255,255,255,.2); }
 			.institution-grid div { padding: .85rem 0; }
 			.section-heading { display: block; }
@@ -158,6 +186,9 @@
 			.compare-row > div + div { border-top: 1px solid var(--line); border-left: 0; }
 			.footer-inner { display: block; }
 			.back-top { display: inline-block; margin-top: .75rem; }
+			.header-actions { gap: .35rem; }
+			.print-button { padding: .5rem; font-size: 0; }
+			.print-button::before { content: "⎙"; font-size: 1.1rem; }
 		}
 	</style>
 </head>
@@ -166,12 +197,15 @@
 	<header class="site-header">
 		<div class="nav-wrap">
 			<a class="brand" href="#inicio" aria-label="Inicio ISUPOL"><span class="brand-mark">I</span><span>ISUPOL / LAB</span></a>
-			<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menú</button>
-			<nav id="nav-links" class="nav-links" aria-label="Navegación principal">
-				<a href="#computadores">Computadores</a>
-				<a href="#redes">Redes</a>
-				<a href="#ciberdelitos">Ciberdelitos</a>
-			</nav>
+			<div class="header-actions">
+				<button id="print-document" class="print-button" type="button" title="Imprimir documento">⎙ <span>Imprimir documento</span></button>
+				<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menú</button>
+				<nav id="nav-links" class="nav-links" aria-label="Navegación principal">
+					<a href="#computadores">Computadores</a>
+					<a href="#redes">Redes</a>
+					<a href="#ciberdelitos">Ciberdelitos</a>
+				</nav>
+			</div>
 		</div>
 	</header>
 
@@ -185,6 +219,8 @@
 					<div><span class="label">Institución</span><span>Instituto Superior Universitario Policial (ISUPOL)</span></div>
 					<div><span class="label">Proyecto</span><span>Despliegue de un Portal Web sobre Estructura de Computadores y Redes mediante GitHub Codespaces y GitHub Pages.</span></div>
 					<div><span class="label">Autor</span><span>Sr. Cbop. Gustavo Valentín Mariño Gavino</span></div>
+					<div><span class="label">Materia</span><span>Informática Básica</span></div>
+					<div><span class="label">Carrera</span><span>Investigación de ciberdelitos</span></div>
 					<div><span class="label">Fecha de creación</span><span>Martes, 08 de septiembre del 2026</span></div>
 				</div>
 			</div>
@@ -194,10 +230,11 @@
 			<div class="section-inner">
 				<div class="section-heading"><div><span class="module-number">01</span><h2>Arquitectura y estructura de computadores</h2></div><p>Del dato almacenado a la instrucción ejecutada: explora los elementos que hacen posible el procesamiento.</p></div>
 				<div class="module-layout">
-					<div>
-						<div class="image-frame"><img src="images/cpu-architecture.jpg" alt="Diagrama de referencia de la arquitectura interna de una CPU"></div>
-						<p class="image-caption">Imagen de referencia: sustituye `images/cpu-architecture.jpg` por tu recurso visual.</p>
-					</div>
+					<article class="panel">
+						<h3>La CPU como centro de procesamiento</h3>
+						<p>La unidad central de procesamiento interpreta instrucciones almacenadas en memoria y coordina el movimiento de datos. Su rendimiento depende de la frecuencia, el número de núcleos, la memoria caché y la capacidad de ejecutar instrucciones en paralelo.</p>
+						<dl class="definition-list"><dt>Datos</dt><dd>Valores que serán procesados o almacenados.</dd><dt>Instrucción</dt><dd>Orden codificada que indica una operación.</dd><dt>Bus</dt><dd>Canal que transporta datos, direcciones y señales de control.</dd></dl>
+					</article>
 					<article class="panel">
 						<h3>Componentes principales de la CPU</h3>
 						<p>Selecciona un componente para consultar su función dentro del procesamiento de una instrucción.</p>
@@ -208,6 +245,11 @@
 						</div>
 						<div id="component-detail" class="component-detail" aria-live="polite">La ALU realiza operaciones aritméticas y lógicas con los datos que recibe.</div>
 					</article>
+				</div>
+				<div class="info-grid">
+					<article class="info-card"><h3>Unidad Aritmético-Lógica</h3><p>Compara valores, suma, resta y aplica operaciones lógicas como AND, OR y NOT. Sus resultados pueden actualizar indicadores de estado.</p></article>
+					<article class="info-card"><h3>Unidad de Control</h3><p>Organiza el orden de las operaciones mediante señales de control y sincroniza memoria, registros y unidades de ejecución.</p></article>
+					<article class="info-card"><h3>Registros internos</h3><p>Son pequeñas memorias de máxima velocidad. El contador de programa y el registro de instrucción son esenciales para seguir la ejecución.</p></article>
 				</div>
 				<div class="module-layout" style="margin-top: 2rem;">
 					<article class="panel">
@@ -229,6 +271,7 @@
 							<div class="memory-level"><strong>Memoria RAM</strong><span>Volátil · trabajo activo</span></div>
 							<div class="memory-level"><strong>Almacenamiento secundario</strong><span>Persistente · mayor capacidad</span></div>
 						</div>
+						<ul><li>La memoria caché reduce el tiempo de espera aprovechando la localidad temporal y espacial.</li><li>La RAM es volátil: su contenido desaparece cuando se corta la alimentación.</li><li>El almacenamiento secundario conserva datos, pero responde más lentamente que la memoria principal.</li></ul>
 					</article>
 				</div>
 			</div>
@@ -242,11 +285,14 @@
 						<h3>Conceptos básicos</h3>
 						<p>Una red conecta dispositivos mediante medios y protocolos para intercambiar datos. Sus componentes esenciales incluyen nodos, interfaces, medios de transmisión, dispositivos de interconexión y reglas de comunicación.</p>
 						<p>En el trabajo policial, entender ese recorrido permite ubicar el origen, destino y contexto temporal de una comunicación digital.</p>
+						<ul><li><strong>Dispositivos finales:</strong> computadores, teléfonos, servidores y sensores.</li><li><strong>Intermediarios:</strong> switches, routers y puntos de acceso.</li><li><strong>Protocolos:</strong> reglas para direccionar, transportar y verificar la información.</li></ul>
 					</article>
-					<div>
-						<div class="image-frame"><img src="images/network-fundamentals.jpg" alt="Esquema de referencia de una red de comunicaciones"></div>
-						<p class="image-caption">Imagen de referencia: sustituye `images/network-fundamentals.jpg`.</p>
-					</div>
+					<article class="panel">
+						<h3>¿Por qué son importantes?</h3>
+						<p>Las redes sostienen servicios institucionales, intercambio de archivos, videovigilancia y comunicaciones operativas. También permiten que un incidente se propague con rapidez.</p>
+						<p>Por eso conviene observar segmentación, controles de acceso, registros de conexión y sincronización horaria al analizar un evento.</p>
+						<div class="info-card"><h3>Principio clave</h3><p>Un paquete no es solo información: también contiene metadatos de origen, destino, protocolo y tiempo.</p></div>
+					</article>
 				</div>
 				<article class="panel" style="margin-top: 2rem;">
 					<h3>Direccionamiento: IP y MAC</h3>
@@ -259,9 +305,9 @@
 					</div>
 				</article>
 				<div class="topology-grid">
-					<article class="topology-card"><h3>Estrella</h3><p>Todos los nodos dependen de un dispositivo central. Un fallo en un cable aísla un equipo; el fallo central interrumpe toda la red.</p><span class="impact">Fallo central: alto impacto</span></article>
-					<article class="topology-card"><h3>Anillo</h3><p>Los nodos forman un circuito. Una interrupción puede romper el recorrido completo, aunque los diseños redundantes reducen ese riesgo.</p><span class="impact">Fallo de enlace: impacto alto</span></article>
-					<article class="topology-card"><h3>Bus</h3><p>Todos comparten un medio lineal. Una avería en el cable principal afecta a todos los dispositivos conectados.</p><span class="impact">Medio principal: crítico</span></article>
+					<article class="topology-card"><h3>Estrella</h3><p>Todos los nodos dependen de un dispositivo central. Facilita la administración y el aislamiento de equipos, pero exige proteger el switch o punto central.</p><span class="impact">Fallo central: alto impacto</span></article>
+					<article class="topology-card"><h3>Anillo</h3><p>Los nodos forman un circuito y el tráfico sigue una secuencia. Una interrupción puede romper el recorrido completo, salvo que exista redundancia.</p><span class="impact">Fallo de enlace: impacto alto</span></article>
+					<article class="topology-card"><h3>Bus</h3><p>Todos comparten un medio lineal. Es sencillo y económico, pero una avería en el cable principal afecta a todos los dispositivos conectados.</p><span class="impact">Medio principal: crítico</span></article>
 				</div>
 			</div>
 		</section>
@@ -279,8 +325,13 @@
 					</div>
 				</div>
 				<div class="module-layout" style="margin-top: 2rem;">
-					<div><div class="image-frame"><img src="images/ram-forensics.jpg" alt="Imagen de referencia para el análisis forense de memoria RAM"></div><p class="image-caption">Imagen de referencia: sustituye `images/ram-forensics.jpg`.</p></div>
 					<article class="panel"><h3>Cadena de análisis</h3><p><strong>Preservar:</strong> documentar el estado y reducir alteraciones.</p><p><strong>Adquirir:</strong> obtener copias forenses verificables.</p><p><strong>Interpretar:</strong> correlacionar memoria, registros y paquetes.</p><p><strong>Comunicar:</strong> presentar hallazgos reproducibles y comprensibles.</p></article>
+					<article class="panel"><h3>Preguntas del investigador</h3><ul><li>¿Qué procesos y conexiones estaban activos en el momento de la intervención?</li><li>¿Coinciden las marcas de tiempo entre memoria, sistema y tráfico?</li><li>¿La evidencia fue preservada con una metodología documentada?</li><li>¿Es posible explicar el hallazgo sin alterar su contexto original?</li></ul></article>
+				</div>
+				<div class="info-grid">
+					<article class="info-card"><h3>Memoria RAM</h3><p>Puede contener procesos, sesiones, comandos, claves temporales y conexiones activas. Su adquisición debe priorizarse cuando la máquina está encendida.</p></article>
+					<article class="info-card"><h3>Registros y metadatos</h3><p>Permiten establecer una línea temporal y relacionar usuarios, eventos, dispositivos y cambios de configuración.</p></article>
+					<article class="info-card"><h3>Tráfico de red</h3><p>Los paquetes aportan contexto sobre comunicaciones y rutas. Deben interpretarse junto con protocolos, direcciones y tiempos de captura.</p></article>
 				</div>
 			</div>
 		</section>
@@ -290,6 +341,7 @@
 	<script>
 		const menuToggle = document.querySelector('.menu-toggle');
 		const navLinks = document.querySelector('#nav-links');
+		document.querySelector('#print-document').addEventListener('click', () => window.print());
 		menuToggle.addEventListener('click', () => {
 			const isOpen = navLinks.classList.toggle('open');
 			menuToggle.setAttribute('aria-expanded', String(isOpen));
